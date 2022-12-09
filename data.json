@@ -1,0 +1,108 @@
+[
+    {
+        "category": "01",
+        "title": "Humayun Ahmed",
+        "name": "Opekkha",
+        "img": "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Opekkha-Humayun_Ahmed-9a14b-222273.png",
+        "location": "Muradpur,Chittagong",
+        "resale_price": "300",
+        "orginal_price": "400",
+        "seller_name": "Jonayed",
+        "number": "0162374743",
+        "uses": "2 month",
+        "time": "2:00 pm"
+    },
+    {
+        "category": "01",
+        "title": "Humayun Ahmed",
+        "name": "Deyal",
+        "img": "https://2.bp.blogspot.com/-f_yTxkNdETQ/XAKmwNhQ6KI/AAAAAAAADbw/nVJrHxv9VUMF0QynKpHNN6lvEf1nIZKKwCLcBGAs/s1600/23244114_1675964295756482_5456692363863855007_n.jpg",
+        "location": "Chawkbazar,Chittagong",
+        "resale_price": "400",
+        "orginal_price": "600",
+        "seller_name": "Abdullah",
+        "number": "0125236567",
+        "uses": "1 Month",
+        "time": "3:00 am"
+    },
+    {
+        "category": "02",
+        "total_view": 400,
+        "title": "Zahir Raihan",
+        "name": "Ar Kothodin",
+        "img": "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Ar_Kotodin-Jahir_Rayhan-63c71-7660.jpg",
+        "location": "Kulshi,Chittagong",
+        "resale_price": "300",
+        "orginal_price": "550",
+        "seller_name": "Arafath",
+        "number": "0198239847",
+        "uses": "3 month",
+        "time": "1:00 pm"
+    },
+    {
+        "category": "02",
+        "total_view": null,
+        "title": "Zahir Raihan",
+        "name": "Shes Biakler  Meye",
+        "img": "https://www.amarbooks.org/thumbs/1573781029.jpg",
+        "location": "Lalkhanbazar,Chittagong",
+        "resale_price": "520",
+        "orginal_price": "630",
+        "seller_name": "Arif Hossen",
+        "number": "089478973",
+        "uses": "4 month",
+        "time": "4:00 am"
+    },
+    {
+        "category": "03",
+        "total_view": 111,
+        "title": "Ahmed Sofa",
+        "name": "Rochona Boli",
+        "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518926829l/38609574.jpg",
+        "location": "Oxyzen,Chittagong",
+        "resale_price": "440",
+        "orginal_price": "530",
+        "seller_name": "Abdullah Arafath",
+        "number": "437834767834",
+        "uses": "5 month",
+        "time": "9:00pm"
+    },
+    {
+        "category": "03",
+        "total_view": 733,
+        "title": "Ahmed Sofa",
+        "name": "Oshkar",
+        "img": "https://bdebooks.com/wp-content/uploads/2019/02/Oskar-by-Ahmed-Sofa-185x278.jpg",
+        "location": "Bohaddarhat.Chittagong",
+        "resale_price": "390",
+        "orginal_price": "590",
+        "seller_name": "Saima akter",
+        "number": "03829043789",
+        "uses": "4 month",
+        "time": "5:00 pm"
+    }
+]
+
+
+
+
+[
+    {
+        "_id": "638e0c068c6c9e52fc6c635d",
+        "name": "Humayun Ahmed Collectios",
+        "category_id ": "01",
+        "category": "01"
+    },
+    {
+        "_id": "638e0c068c6c9e52fc6c635e",
+        "name": "Zahir Raihan Collectios",
+        "category_id": "02",
+        "category": "02"
+    },
+    {
+        "_id": "638e0c068c6c9e52fc6c635f",
+        "name": "Ahmed Sofa Collectios",
+        "category": "03",
+        "category_id ": "03"
+    }
+]

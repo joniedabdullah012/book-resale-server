@@ -43,7 +43,7 @@ async function run() {
         })
         const bookCatagoriesIdnew = client.db('bookResale').collection('bookCatagoriesId')
         app.get('/bookCatagoriesId/:id', async (req, res) => {
-            console.log(req.params.id);
+
 
             const id = req.params.id;
             const query = { category: (id) };
@@ -52,19 +52,23 @@ async function run() {
             const catagory = await bookCatagoriesIdnew.find(query).toArray()
             res.send(catagory)
 
+        });
+
+
+        const bookingCollection = client.db('bookResale').collection('bookings')
+
+        app.post('/bookings', async (req, res) => {
+            const booking = req.body
+
+            const result = await bookingCollection.insertOne(booking);
+            res.send(result);
+
+
+
+
         })
 
 
-        // const bookCatagoriesId = client.db('bookResale').collection('bookCatagoriesId')
-        // app.get('/bookCatagoriesId/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const bookId = { _id: ObjectId(id) };
-
-
-        //     const catagory = await bookCatagoriesId.findOne(bookId)
-        //     res.send(catagory)
-
-        // })
 
 
 
@@ -80,33 +84,17 @@ run().catch(console.log)
 
 // practice 
 
-app.get('/cataegory/:id', async (req, res) => {
-    const id = req.params.id;
-    const catagory = await details.filter(n => n.category_id === id);
-    res.send(catagory)
-
-
-
-})
-app.get('/cataegory', async (req, res) => {
-
-    res.send(details)
-
-
-
-})
-
 
 
 
 app.get('/', async (req, res) => {
-    res.send('doctors portal server is running')
+    res.send('books portal server is running')
 
 })
 
 
 app.listen(port, () => {
-    console.log(`doctors portal running ${port}`)
+    console.log(`books portal running ${port}`)
 })
 
 

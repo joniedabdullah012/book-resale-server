@@ -20,7 +20,31 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-function verifyJWT(req, res, next)
+
+// FUNCTION JWT*****
+
+
+function verifyJWT(req, res, next) {
+    console.log('token', req.headers.authorization);
+    const autHeader = req.headers.authorization
+    if (!autHeader) {
+        return res.send(401).send('unauthorized access')
+    }
+
+    const token = authorization.split(' ')[1];
+
+    jwt.verify(token, process.env.ACCESS_TOKEN, function (err, decoded) {
+        if (err) {
+            return res.status(403).send({ message: 'forbidden access' })
+        }
+        req.decoded = decoded;
+        next()
+
+
+
+    })
+
+}
 
 
 
@@ -28,6 +52,9 @@ function verifyJWT(req, res, next)
 async function run() {
 
     try {
+
+        // BOOK CATAGORY*****
+
         const bookCategories = client.db('bookResale').collection('bookCatagories')
         app.get('/bookCatagories', async (req, res) => {
             const query = {};
@@ -36,6 +63,8 @@ async function run() {
 
 
         });
+
+        // BOOK CATAGORIES ID ALL****
 
         const bookCatagoriesId = client.db('bookResale').collection('bookCatagoriesId')
         app.get('/bookCatagoriesId', async (req, res) => {
@@ -46,6 +75,8 @@ async function run() {
             res.send(catagory)
 
         })
+
+        // BOOK CATAGORIES ID
         const bookCatagoriesIdnew = client.db('bookResale').collection('bookCatagoriesId')
         app.get('/bookCatagoriesId/:id', async (req, res) => {
 
@@ -58,6 +89,8 @@ async function run() {
             res.send(catagory)
 
         });
+
+        // BOOKINGS COOLLECTION 
 
 
         const bookingCollection = client.db('bookResale').collection('bookings')
@@ -72,15 +105,25 @@ async function run() {
 
 
         });
-        app.get('/bookings', async (req, res) => {
+
+        // TOKEN 
+
+
+        app.get('/bookings', verifyJWT, async (req, res) => {
             const email = req.query.email;
-            console.log('token', req.headers.authorization);
+            const decodedEmail = req.decoded.email;
+            if (email !== decodedEmail) {
+                return res.status(403).send({ message: 'forbidden access' })
+            }
+
             const query = { email: email }
             const bookings = await bookingCollection.find(query).toArray()
             res.send(bookings)
 
 
         });
+
+        // SELLER COLLECTION
 
         const usersCollection = client.db('bookResale').collection('usersCollection')
 
@@ -91,6 +134,8 @@ async function run() {
 
 
         });
+
+        // JWT**************
 
 
         app.get('/jwt', async (req, res) => {

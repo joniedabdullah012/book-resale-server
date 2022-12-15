@@ -28,7 +28,7 @@ function verifyJWT(req, res, next) {
     console.log('token', req.headers.authorization);
     const autHeader = req.headers.authorization
     if (!autHeader) {
-        return res.send(401).send('unauthorized access')
+        return res.status(401).send('unauthorized access')
     }
 
     const token = authorization.split(' ')[1];
@@ -134,6 +134,15 @@ async function run() {
 
 
         });
+
+        app.get('/users', async (req, res) => {
+
+            const query = {};
+            const users = await usersCollection.find(query).toArray();
+            res.send(users)
+
+
+        })
 
         // JWT**************
 

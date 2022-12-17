@@ -25,13 +25,13 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 
 function verifyJWT(req, res, next) {
-    console.log('token', req.headers.authorization);
-    const autHeader = req.headers.authorization
-    if (!autHeader) {
+    // console.log('token inside', req.headers.authorization);
+    const authHeader = req.headers.authorization
+    if (!authHeader) {
         return res.status(401).send('unauthorized access')
     }
 
-    const token = authorization.split(' ')[1];
+    const token = authHeader.split(' ')[1];
 
     jwt.verify(token, process.env.ACCESS_TOKEN, function (err, decoded) {
         if (err) {
@@ -115,6 +115,7 @@ async function run() {
             if (email !== decodedEmail) {
                 return res.status(403).send({ message: 'forbidden access' })
             }
+            console.log('token', req.headers.authorization);
 
             const query = { email: email }
             const bookings = await bookingCollection.find(query).toArray()
@@ -122,23 +123,23 @@ async function run() {
 
 
         });
-
+        // // 
         // SELLER COLLECTION
 
-        const usersCollection = client.db('bookResale').collection('usersCollection')
+        const sellerCollection = client.db('bookResale').collection('sellerCollection')
 
-        app.post('/users', async (req, res) => {
+        app.post('/seller', async (req, res) => {
             const user = req.body;
-            const result = await usersCollection.insertOne(user)
+            const result = await sellerCollection.insertOne(user)
             res.send(result)
 
 
         });
 
-        app.get('/users', async (req, res) => {
+        app.get('/seller', async (req, res) => {
 
             const query = {};
-            const users = await usersCollection.find(query).toArray();
+            const users = await sellerCollection.find(query).toArray();
             res.send(users)
 
 
@@ -147,19 +148,19 @@ async function run() {
 
         // seller verifyed
 
-        app.get('/users/admin/:email', async (req, res) => {
+        app.get('/seller/admin/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email }
-            const user = await usersCollection.findOne(query);
-            res.send({ isAdmin: user?.role === 'verify' })
+            const user = await sellerCollection.findOne(query);
+            res.send({ isAdmin: user?.role === 'admin' })
         })
 
-        app.put('/users/verify/:id', verifyJWT, async (req, res) => {
+        app.put('/seller/admin/:id', verifyJWT, async (req, res) => {
             const decodedEmail = req.decoded.email;
             const query = { email: decodedEmail };
-            const user = await usersCollection.findOne(query);
+            const user = await sellerCollection.findOne(query);
 
-            if (user?.role !== 'verify') {
+            if (user?.role !== 'admin') {
                 return res.status(403).send({ message: 'Forbidden access' })
             }
 
@@ -169,13 +170,13 @@ async function run() {
 
             const updatedDoc = {
                 $set: {
-                    role: 'verify'
+                    role: 'admin'
 
                 }
 
             }
 
-            const result = await usersCollection.updateOne(filter, updatedDoc, options)
+            const result = await sellerCollection.updateOne(filter, updatedDoc, options)
             res.send(result)
 
 
@@ -189,14 +190,14 @@ async function run() {
         app.get('/jwt', async (req, res) => {
             const email = req.query.email;
             const query = { email: email }
-            const user = await usersCollection.findOne(query)
+            const user = await sellerCollection.findOne(query)
+
 
             if (user) {
-                const token = jwt.sign({ email }, process.env.ACCESS_TOKEN, { expiresIn: '23h' })
+                const token = jwt.sign({ email }, process.env.ACCESS_TOKEN, { expiresIn: '1h' })
                 return res.send({ accessToken: token });
 
             }
-            console.log(user);
 
             res.status(403).send({ accessToken: '' })
 

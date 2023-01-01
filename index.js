@@ -111,6 +111,7 @@ async function run() {
 
         app.get('/bookings', verifyJWT, async (req, res) => {
             const email = req.query.email;
+
             const decodedEmail = req.decoded.email;
             if (email !== decodedEmail) {
                 return res.status(403).send({ message: 'forbidden access' })
@@ -126,39 +127,50 @@ async function run() {
         // // 
         // SELLER COLLECTION
 
-        const sellerCollection = client.db('bookResale').collection('sellerCollection')
+        const usersCollection = client.db('bookResale').collection('users')
 
-        app.post('/seller', async (req, res) => {
+        app.post('/users', async (req, res) => {
             const user = req.body;
-            const result = await sellerCollection.insertOne(user)
+            console.log(user);
+            const result = await usersCollection.insertOne(user)
             res.send(result)
 
 
         });
 
-        app.get('/seller', async (req, res) => {
+        app.get('/users', async (req, res) => {
 
             const query = {};
-            const users = await sellerCollection.find(query).toArray();
+            const users = await usersCollection.find(query).toArray();
             res.send(users)
 
 
         });
 
 
-        // seller verifyed
+        // make admin
 
-        app.get('/seller/admin/:email', async (req, res) => {
+        app.get('/users/admin/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email }
-            const user = await sellerCollection.findOne(query);
+            const user = await usersCollection.findOne(query);
             res.send({ isAdmin: user?.role === 'admin' })
         })
+        // make seller
 
-        app.put('/seller/admin/:id', verifyJWT, async (req, res) => {
+        app.get('/users/seller/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email }
+            const user = await usersCollection.findOne(query);
+            res.send({ isSeller: user?.role === 'seller' })
+        })
+
+
+
+        app.put('/users/admin/:id', verifyJWT, async (req, res) => {
             const decodedEmail = req.decoded.email;
             const query = { email: decodedEmail };
-            const user = await sellerCollection.findOne(query);
+            const user = await usersCollection.findOne(query);
 
             if (user?.role !== 'admin') {
                 return res.status(403).send({ message: 'Forbidden access' })
@@ -176,12 +188,43 @@ async function run() {
 
             }
 
-            const result = await sellerCollection.updateOne(filter, updatedDoc, options)
+            const result = await usersCollection.updateOne(filter, updatedDoc, options)
+            res.send(result)
+
+
+
+        });
+
+        // make seller
+
+        app.put('/users/seller/:id', verifyJWT, async (req, res) => {
+            const decodedEmail = req.decoded.email;
+            const query = { email: decodedEmail };
+            const user = await usersCollection.findOne(query);
+
+            if (user?.role !== 'seller') {
+                return res.status(403).send({ message: 'Forbidden access' })
+            }
+
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true };
+
+            const updatedDoc = {
+                $set: {
+                    role: 'seller'
+
+                }
+
+            }
+
+            const result = await usersCollection.updateOne(filter, updatedDoc, options)
             res.send(result)
 
 
 
         })
+
 
 
         // JWT**************
@@ -190,7 +233,7 @@ async function run() {
         app.get('/jwt', async (req, res) => {
             const email = req.query.email;
             const query = { email: email }
-            const user = await sellerCollection.findOne(query)
+            const user = await usersCollection.findOne(query)
 
 
             if (user) {

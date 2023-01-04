@@ -163,6 +163,22 @@ async function run() {
 
 
         });
+        app.get('/seller', async (req, res) => {
+
+            const query = { role: 'seller' };
+            const users = await usersCollection.find(query).toArray();
+            res.send(users)
+
+
+        });
+        app.get('/buyer', async (req, res) => {
+
+            const query = { role: 'Buyer' };
+            const users = await usersCollection.find(query).toArray();
+            res.send(users)
+
+
+        });
 
 
         // make admin
@@ -173,6 +189,17 @@ async function run() {
             const user = await usersCollection.findOne(query);
             res.send({ isAdmin: user?.role === 'admin' })
         })
+
+
+
+        app.delete('/users/admin/:id', verifyJWT, async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) }
+            const result = await usersCollection.deleteOne(filter)
+            res.send(result)
+
+
+        });
         // make seller
 
         app.get('/users/seller/:email', async (req, res) => {
@@ -289,6 +316,8 @@ async function run() {
 
 
         });
+
+
 
         app.post('/create-payment-intent', async (req, res) => {
             const booking = req.body;
